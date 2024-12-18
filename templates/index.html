@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load news_tags %}
+{% all_tur as turlar %}
+{% all_gul as gullar %}
+
+{% block main %}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for tur in turlar %}
+    <div class="col">
+    <div class="card h-100" style="background: linear-gradient(45deg,#0909b9,#ae1409); color: white">
+        {% if tur.photo %}
+        <img src="{{ tur.photo.url }}" class="card-img-top" alt="Skyscrapers"/>
+        {% else %}
+        <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/044.webp"/>
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{ tur.nomi }}</h5>
+            <p class="card-text">
+              {{ tur.malumot|truncatewords:20 }}
+            </p>
+        </div>
+    </div>
+    </div>
+    {% endfor %}
+    {% for gul in gullar %}
+    <div class="col">
+    <div class="card h-100" style="background: linear-gradient(45deg,#0909b9,#ae1409); color: white">
+       {% if brand.photo %}
+      <img src="{{ gul.photo.url }}" class="card-img-top" alt="Skyscrapers"/>
+        {% else %}
+      <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/044.webp"/>
+      {% endif %}
+      <div class="card-body">
+        <h5 class="card-title">{{ gul.nomi }}</h5>
+        <p class="card-text">
+            {{ gul.malumot|truncatewords:20 }}
+        </p>
+      </div>
+      <div class="card-footer">
+        <small class="text-muted">{{ gul.created|date:"D d F Y" }}</small>
+      </div>
+    </div>
+  </div>
+    {% endfor %}
+</div>
+{% endblock main %}
