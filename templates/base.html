@@ -1,6 +1,5 @@
 {% load static %}
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,8 +29,8 @@
 
                     <!--start navbar-->
 <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="home">BFC</a>
+    <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'home' %}">BFC</a>
     <button
       data-mdb-collapse-init
       class="navbar-toggler"
@@ -43,11 +42,10 @@
     >
       <i class="fas fa-bars"></i>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="home">Asosiy</a>
-        <a class="nav-link" href="{{ url 'turlar' tur.id}}">Turlar</a>
-        <a class="nav-link" href="{{ url 'gullar' gul.id}}">Gullar</a>
+        <a class="nav-link active" aria-current="page" href="{% url 'add_tur' %}">Tur qo'shish</a>
+        <a class="nav-link active" aria-current="page" href="{% url 'add_gul' %}">Gul qo'shish</a>
       </div>
     </div>
   </div>

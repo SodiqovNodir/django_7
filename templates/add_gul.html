@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{ gullar.as_p }}
+
+    <button type="submit">Saqlash</button>
+
+</form>
+{% endblock main %}
