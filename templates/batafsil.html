@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+
+{% block main %}
+
+    <div class="d-flex flex-row-reverse">
+        <a href="{{ url 'update_gul' gul.pk }}"><i class="fas fa-pen-to-square"></i></a>
+    </div>
+
+    {% for gul in gullar %}
+    <div class="row g-0 mt-4 mb-4" style="background: linear-gradient(45deg,#0909b9,#ae1409); color: white">
+    <div class="col-md-4">
+      {% if gul.photo %}
+      <img src="{% gul.rasm.url %}" alt="Trendy Pants and Shoes" class="img-fluid rounded-start"/>
+      {% else %}
+      <img src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp" alt="Trendy Pants and Shoes" class="img-fluid rounded-start"/>
+      {% endif %}
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">{{ gul.nomi }}</h5>
+        <p class="card-text">
+          {{ gul.malumot }}
+        </p>
+        <p class="card-text">
+          <small class="text-muted">{{ gul.created|date:"D d F Y" }}</small>
+        </p>
+      </div>
+    </div>
+  </div>
+    {% endfor %}
+{% endblock main %}

@@ -3,8 +3,24 @@
 {% block main %}
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-
-    {{ gullar.as_p }}
+    <p>
+    {{ gullar.nomi }}
+    </p>
+    <p>
+    {{ gullar.malumot }}
+    </p>
+    <p>
+    {% if photo %}
+    <a href="{{ photo.url }}">{{ photo }}</a>
+    {% endif %}
+    {{ gullar.photo }}
+    </p>
+    <p>
+    {{ gullar.created }}
+    </p>
+    <p>
+    {{ gullar.turi }}
+    </p>
 
     <button type="submit">Saqlash</button>
 
