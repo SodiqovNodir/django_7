@@ -1,4 +1,3 @@
-from lib2to3.fixes.fix_input import context
 
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect, get_object_or_404
@@ -8,36 +7,36 @@ from .models import Turi,Gul
 
 def asosiy(request):
     turlar = Turi.objects.all()
-    turar = Gul.objects.all()
+    gullar = Gul.objects.all()
     contects = {
         'turlar' : turlar,
-        'turar' : turar,
+        'gullar' : gullar,
     }
     return render(request, 'index.html', context= contects)
 
 def gul_tur(request, turi_id):
     turlar = Turi.objects.all()
-    turar = Gul.objects.objects.filter(turi_id=turi_id)
+    gullar = Gul.objects.objects.filter(turi_id=turi_id)
 
     contexts = {
         'turlar' : turlar,
-        'turar' : turar,
+        'gullar' : gullar,
     }
     return render(request, "index.html", context = contexts)
 
 def gul(request, gul_id):
     turlar = Turi.objects.all()
-    turar = Gul.objects.objects.filter(gul_id=gul_id)
+    gullar = Gul.objects.objects.filter(gul_id=gul_id)
     contexts = {
         'turlar' : turlar,
-        'turar' : turar,
+        'gullar' : gullar,
     }
     return render(request, "index.html", context = contexts)
 
 def batafsil(request, gul_id):
-    turar = Gul.objects.get(id = gul_id)
+    gullar = Gul.objects.get(id = gul_id)
     contexts = {
-        'turar': turar,
+        'gullar': gullar,
     }
 
     return render(request, 'batafsil.html', context=contexts)
@@ -61,40 +60,40 @@ def add_gul(request: WSGIRequest):
     if request.method == 'POST':
         lesson = GulForm(data=request.POST, files=request.FILES)
         if lesson.is_valid():
-            turar = Gul.objects.create(**gul.cleaned_data)
-            return redirect('home', turar)
+            gullar = Gul.objects.create(**gul.cleaned_data)
+            return redirect('home', gullar)
 
-    turar = GulForm
+    gullar = GulForm
     contexts = {
-        'turar' : turar,
+        'gullar' : gullar,
     }
     return render(request, 'add_gul.html', context = contexts)
 
 def update_gul(request:WSGIRequest, gul_id):
-    tur = get_object_or_404(Gul, pk = gul_id)
+    gul = get_object_or_404(Gul, pk = gul_id)
 
     if request.method == 'POST':
         form = GulForm(data=request.POST, files=request.FILES)
         if form.is_valid():
-            tur.nomi = form.cleaned_data.get('nomi')
-            tur.malumot = form.cleaned_data.get('malumot')
-            tur.rasm = form.cleaned_data.get('rasm') if form.cleaned_data.get('rasm') else tur.rasm
-            tur.created = form.cleaned_data.get('created')
-            tur.turi = form.cleaned_data.get('turi')
-            tur.save()
+            gul.nomi = form.cleaned_data.get('nomi')
+            gul.malumot = form.cleaned_data.get('malumot')
+            gul.rasm = form.cleaned_data.get('rasm') if form.cleaned_data.get('rasm') else tur.rasm
+            gul.created = form.cleaned_data.get('created')
+            gul.turi = form.cleaned_data.get('turi')
+            gul.save()
 
 
     form = GulForm(initial={
-        'nomi': tur.nomi,
-        'rasm': tur.rasm,
-        'malumot':tur.malumot,
-        'created': tur.created,
-        'turi': tur.turi
+        'nomi': gul.nomi,
+        'rasm': gul.rasm,
+        'malumot':gul.malumot,
+        'created': gul.created,
+        'turi': gul.turi
     })
 
     contexts = {
         'form' : form,
-        'photo':tur.rasm
+        'photo':gul.rasm
     }
     return render(request, 'add_gul.html', context = contexts)
 
