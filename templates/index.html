@@ -7,8 +7,8 @@
 
     <div class="navbar-nav">
         <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Asosiy</a>
-        <a class="nav-link active" aria-current="page" href="{% url 'tur' turi.pk %}">Turlar</a>
-        <a class="nav-link active" aria-current="page" href="{% url 'gul' gul.pk %}">Gullar</a>
+        <a class="nav-link active" aria-current="page" href="#">Turlar</a>
+        <a class="nav-link active" aria-current="page" href="#">Gullar</a>
     </div>
 </div>
 
@@ -18,12 +18,12 @@
     <div class="col">
     <div class="card h-100" style="background: linear-gradient(45deg,#0909b9,#ae1409); color: white">
         {% if tur.photo %}
-        <a href="{% url 'batafsil' gul.pk %}">
+        <a href="#">
             <img src="{{ tur.photo.url }}" class="card-img-top" alt="Skyscrapers"/>
         </a>
         {% else %}
-        <a href="{% url 'batafsil' gul.pk %}">
-            <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/044.webp"/>
+        <a href="#">
+            <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/044.webp" width="355px"/>
         </a>
         {% endif %}
         <div class="card-body">
@@ -39,12 +39,12 @@
     <div class="col">
     <div class="card h-100" style="background: linear-gradient(45deg,#0909b9,#ae1409); color: white">
        {% if brand.photo %}
-        <a href="{% url 'batafsil' gul.pk %}">
+        <a href="#">
             <img src="{{ gul.photo.url }}" class="card-img-top" alt="Skyscrapers"/>
         </a>
         {% else %}
-        <a href="{% url 'batafsil' gul.pk %}">
-            <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/044.webp"/>
+        <a href="#">
+            <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/044.webp" width="355px"/>
         </a>
         {% endif %}
       <div class="card-body">

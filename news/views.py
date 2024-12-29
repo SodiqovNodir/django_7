@@ -1,9 +1,12 @@
-
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import login, logout, authenticate
 
-from .forms import TurForm, GulForm
+from .forms import TurForm, GulForm, RegisterForm, LoginForm
 from .models import Turi,Gul
+
 
 def asosiy(request):
     turlar = Turi.objects.all()
@@ -77,7 +80,7 @@ def update_gul(request:WSGIRequest, gul_id):
         if form.is_valid():
             gul.nomi = form.cleaned_data.get('nomi')
             gul.malumot = form.cleaned_data.get('malumot')
-            gul.rasm = form.cleaned_data.get('rasm') if form.cleaned_data.get('rasm') else tur.rasm
+            gul.rasm = form.cleaned_data.get('rasm') if form.cleaned_data.get('rasm') else gul.rasm
             gul.created = form.cleaned_data.get('created')
             gul.turi = form.cleaned_data.get('turi')
             gul.save()
@@ -124,3 +127,41 @@ def update_tur(request:WSGIRequest, turi_id):
         'photo':tur.rasm
     }
     return render(request, 'add_gul.html', context = contexts)
+
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(data=request.POST)
+        if form.is_valid():
+            password = form.cleaned_data.get('password')
+            password_repeat = form.cleaned_data.get('password_repeat')
+            if password_repeat == password:
+                user = User.objects.create_user(
+                    form.cleaned_data.get('username'),
+                    form.cleaned_data.get('email'),
+                    password
+                )
+                messages.success(request, 'Akount yaratildi 😍🥰')
+                return redirect('login_user')
+    context = {
+            'form': RegisterForm()
+    }
+    return render(request, 'auth/register.html', context)
+
+def login_user(request):
+    if request.method == 'POST':
+        form = LoginForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username = username, password = password)
+            messages.success(request, 'Xush kelibsiz😍☺️')
+            login(request, user)
+            return redirect('home')
+    context = {
+        'form':LoginForm(),
+    }
+    return render(request, 'auth/login.html', context)
+
+def logout_user(request):
+    logout(request)
+    return redirect('login_user')
