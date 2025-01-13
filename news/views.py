@@ -1,11 +1,14 @@
+from ctypes import py_object
+
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 
-from .forms import TurForm, GulForm, RegisterForm, LoginForm
-from .models import Turi,Gul
+
+from .forms import TurForm, GulForm, RegisterForm, LoginForm, CommentForm
+from .models import Turi,Gul, Comment
 
 
 def asosiy(request):
@@ -27,24 +30,15 @@ def gul_tur(request, turi_id):
     }
     return render(request, "index.html", context = contexts)
 
-def gul(request, gul_id):
-    turlar = Turi.objects.all()
-    gullar = Gul.objects.objects.filter(gul_id=gul_id)
-    contexts = {
-        'turlar' : turlar,
-        'gullar' : gullar,
-    }
-    return render(request, "index.html", context = contexts)
-
 def batafsil(request, gul_id):
-    gullar = Gul.objects.get(id = gul_id)
+    gul = Gul.objects.filter(id = gul_id)
     contexts = {
-        'gullar': gullar,
+        'gul': gul,
+        'comment': CommentForm(),
+        'com':Comment.objects.filter(gul_id=gul_id),
     }
 
     return render(request, 'batafsil.html', context=contexts)
-
-
 
 def add_tur(request: WSGIRequest):
 
@@ -99,7 +93,6 @@ def update_gul(request:WSGIRequest, gul_id):
         'photo':gul.rasm
     }
     return render(request, 'add_gul.html', context = contexts)
-
 
 def update_tur(request:WSGIRequest, turi_id):
     tur = get_object_or_404(Turi, pk = turi_id)
@@ -165,3 +158,58 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('login_user')
+
+def comment_save(request:WSGIRequest, gul_id):
+    if request.user.authenticated:
+        if request.method == "POST":
+            coment = CommentForm(data=request.POST)
+            if coment.is_valid():
+                gul = get_object_or_404(Gul, pk = gul_id)
+                com = Comment.objects.create(
+                    text = gul.cleaned_data.get('text'),
+                    author = request.user,
+                    gul = gul
+                )
+                messages.success(request, "Comment qo'shildi.")
+
+        return redirect("batafsil", gul_id = gul_id)
+    messages.error(request, "Avval ro'yhatdan o'ting")
+    return redirect('login_user')
+
+def comment_delete(request, comment_id):
+    if request.user.is_aauthenticated:
+        comment = get_object_or_404(Comment, pk = comment_id)
+        if request.user == comment.author or request.user.is_superuser:
+            gul_id = comment.gul.pk
+            comment.delete()
+            messages.success(request, "Comment o'chirildi")
+            return redirect('batafsil', gul_id = gul_id)
+
+    messages.error(request, "Avval ro'yhatdan o'ting")
+    return redirect('login_user')
+
+def update_comment(request:WSGIRequest, comment_id):
+    comment = get_object_or_404(Comment, pk = comment_id)
+
+    if request.method == 'POST':
+        form = CommentForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            comment.author = form.cleaned_data.get('author')
+            comment.text = form.cleaned_data.get('text')
+            comment.created = form.cleaned_data.get('created')
+            comment.gul = form.cleaned_data.get('gul')
+            comment.save()
+
+
+    form = CommentForm(initial={
+        'author': comment.author,
+        'text':comment.text,
+        'created': comment.created,
+        'gul': comment.gul,
+    })
+
+    contexts = {
+        'form' : form,
+    }
+    return render(request, 'add_gul.html', context = contexts)
+

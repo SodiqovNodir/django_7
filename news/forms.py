@@ -1,5 +1,3 @@
-from idlelib.autocomplete import FILES
-
 from django import forms
 
 from news.models import Turi
@@ -27,3 +25,5 @@ class LoginForm(forms.Form):
     username = forms.CharField(max_length=50, widget=forms.TextInput())
     password = forms.CharField(min_length=8, widget=forms.PasswordInput())
 
+class CommentForm(forms.Form):
+    text = forms.CharField(max_length=500, widget=forms.Textarea, label='Comment')

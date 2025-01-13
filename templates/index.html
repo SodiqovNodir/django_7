@@ -38,12 +38,12 @@
     {% for gul in gullar %}
     <div class="col">
     <div class="card h-100" style="background: linear-gradient(45deg,#0909b9,#ae1409); color: white">
-       {% if brand.photo %}
-        <a href="#">
+       {% if gul.photo %}
+        <a href="{% url 'batafsil' gul.pk %}}">
             <img src="{{ gul.photo.url }}" class="card-img-top" alt="Skyscrapers"/>
         </a>
         {% else %}
-        <a href="#">
+        <a href="{% url 'batafsil' gul.pk %}">
             <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/044.webp" width="355px"/>
         </a>
         {% endif %}

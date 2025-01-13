@@ -1,32 +1,56 @@
 {% extends 'base.html' %}
 
-
 {% block main %}
+<div class="d-flex flex-row-reverse mb-3">
+    <a href="#" class="fas fa-pen-to-square" style="color:white;"></a>
+</div>
 
-    <div class="d-flex flex-row-reverse">
-        <a href="#"><i class="fas fa-pen-to-square"></i></a>
-    </div>
-
-    {% for gul in gullar %}
-    <div class="row g-0 mt-4 mb-4" style="background: linear-gradient(45deg,#0909b9,#ae1409); color: white">
-    <div class="col-md-4">
-      {% if gul.photo %}
-      <img src="#" alt="Trendy Pants and Shoes" class="img-fluid rounded-start"/>
-      {% else %}
-      <img src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp" alt="Trendy Pants and Shoes" class="img-fluid rounded-start"/>
-      {% endif %}
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title">{{ gul.nomi }}</h5>
-        <p class="card-text">
-          {{ gul.malumot }}
-        </p>
-        <p class="card-text">
-          <small class="text-muted">{{ gul.created|date:"D d F Y" }}</small>
-        </p>
-      </div>
-    </div>
+{% for g in gul %}
+<div class="card mb-3">
+  <img src="https://mdbcdn.b-cdn.net/img/new/slides/041.webp" class="card-img-top" alt="Wild Landscape"/>
+  <div class="card-body">
+    <h5 class="card-title">{{ g.nomi }}</h5>
+    <p class="card-text">{{ g.malumot}}</p>
+    <p class="card-text">
+      <small class="text-muted">{{ g.created|date:"D d F Y" }}</small>
+    </p>
   </div>
-    {% endfor %}
+</div>
+{% endfor %}
+
+{% if request.user.is_authenticated %}
+<form method="post" action="#">
+    {% csrf_token %}
+    {{ comment.as_p }}
+
+    <button type="submit" class="btn btn-success">Saqlash</button>
+
+</form>
+{% else %}
+<div style="color:red">
+<h3>Comment qoldirmoqchi bo'lsangiz ro'yxatdan o'ting <a href="{% url 'login_user' %}" style="color:blue">Login</a></h3>
+</div>
+{% endif %}
+
+<div class="d-flex justify-content-end mb-3">
+    <a href="#" class="fas fa-pen-to-square" style="color:white;"></a>
+</div>
+
+{% for c in com%}
+<div class="card text-center mt-3 mb-3">
+  <div class="card-header">
+      {{ c.author.username }}<br>
+      {% if request.user == comment.author or request.user.is_superuser %}
+      <a href="{% url 'comment_delete' comment.pk %}">O'chirish</a>
+      {% endif %}
+  </div>
+    
+  <div class="card-body">
+    <h5 class="card-title">{{ c.text }}</h5>
+  </div>
+  <div class="card-footer text-muted">{{ c.created|date:"D d F Y" }}</div>
+</div>
+{% endfor %}
+
+
 {% endblock main %}
